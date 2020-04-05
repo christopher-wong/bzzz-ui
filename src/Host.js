@@ -22,13 +22,58 @@ const PlayersBuzzedContainer = styled.div``
 const PlayersConnected = styled.div``
 
 class Host extends React.PureComponent {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            gameCode: null,
+        }
+    }
+
+    async componentDidMount() {
+        const response = await fetch(`https:localhost:8080/host`, {
+            method: 'POST',
+        })
+        const json = await response.json()
+        
+        this.setState({
+            ...this.state,
+            ...json,
+        })
+
+        const { gameCode } = this.state;
+
+        this.eventSource = new EventSource(`https://localhost:8080/host/${gameCode}`);
+        
+        this.eventSource.onmessage = e => (
+            this.updateHostState(JSON.parse(e.data))
+        )
+
+        this.eventSource.onerror = e => {
+            console.log(e)
+        }
+    }
+
+    componentWillUnmount() {
+        this.eventSource.close()
+    }
+
+    createGame = () => {
+
+    }
+
+    updateHostState = (hostState) => {
+        console.log(hostState)
+    }
+
     render() {
-        let code = Math.floor(Math.random()*90000) + 10000;
+        const { gameCode } = this.state
 
         return (
             <Container>
                 <GameCodeContainer>
-                    Game Code: {code}
+                    Game Code: {gameCode}
                 </GameCodeContainer>
                 <ControlContainer>
                     <Button variant="danger" block>
