@@ -12,7 +12,7 @@ class Home extends React.PureComponent {
   render() {
     return (
       <Container>
-        <h1>Hello World</h1>
+        <h1>{'<WEBSITE NAME HERE>'}</h1>
         <Link to="/join">
           <Button variant="primary" block>
             Join

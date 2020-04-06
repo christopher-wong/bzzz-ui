@@ -31,6 +31,26 @@ class Host extends React.PureComponent {
         }
     }
 
+    handleToggleLock = async (e) => {
+        e.preventDefault()
+
+        const { gameCode } = this.state;
+
+        await fetch(`https://localhost:8080/host/${gameCode}/lock`, {
+            method: "POST",
+        })
+    }
+
+    handleResetBuzzers = async (e) => {
+        e.preventDefault()
+
+        const { gameCode } = this.state;
+
+        await fetch(`https://localhost:8080/host/${gameCode}/reset`, {
+            method: "POST",
+        })
+    }
+
     async componentDidMount() {
         const response = await fetch(`https:localhost:8080/host`, {
             method: 'POST',
@@ -73,13 +93,13 @@ class Host extends React.PureComponent {
         return (
             <Container>
                 <GameCodeContainer>
-                    Game Code: {gameCode}
+                    <h1>Game Code: <code>{gameCode}</code></h1>
                 </GameCodeContainer>
                 <ControlContainer>
-                    <Button variant="danger" block>
+                    <Button variant="danger" onClick={this.handleResetBuzzers} block>
                         Reset all buzzers
                     </Button>
-                    <Button variant="warning" block>
+                    <Button variant="warning" onClick={this.handleToggleLock} block>
                         Toggle Lock
                         {' '}
                         <FontAwesomeIcon icon={faUnlock} />
