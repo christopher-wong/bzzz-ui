@@ -8,9 +8,7 @@ const Container = styled.div`
     margin: 1em;
 `
 
-const PlayersBuzzedList = styled.ol`
-    list-style-type: none;
-`
+const PlayersBuzzedList = styled.ol``
 
 const PlayersConnectedList = styled.ol`
     list-style-type: none;
@@ -28,6 +26,8 @@ class Host extends React.PureComponent {
 
         this.state = {
             gameCode: null,
+            connected: [],
+            buzzed: [],
         }
     }
 
@@ -39,6 +39,11 @@ class Host extends React.PureComponent {
         await fetch(`https://localhost:8080/host/${gameCode}/lock`, {
             method: "POST",
         })
+
+        this.setState({
+            ...this.state,
+            buzzed: []
+        })
     }
 
     handleResetBuzzers = async (e) => {
@@ -48,6 +53,11 @@ class Host extends React.PureComponent {
 
         await fetch(`https://localhost:8080/host/${gameCode}/reset`, {
             method: "POST",
+        })
+
+        this.setState({
+            ...this.state,
+            buzzed: []
         })
     }
 
@@ -85,11 +95,39 @@ class Host extends React.PureComponent {
 
     updateHostState = (hostState) => {
         console.log(hostState)
+        if (hostState.action === "joined") {
+            this.setState({
+                ...this.state,
+                connected: [...this.state.connected, {
+                    playerName: hostState.playerName,
+                    playerID: hostState.playerID,
+                    time: hostState.time,
+                }]
+            })
+        } else if (hostState.action === "buzz") {
+            this.setState({
+                ...this.state,
+                buzzed: [...this.state.buzzed, {
+                    playerName: hostState.playerName,
+                    playerID: hostState.playerID,
+                    time: hostState.time
+                }]
+            })
+        } else if (hostState.action === "disconnect") {
+            this.setState({
+                ...this.state,
+                // remove the player who disconnected from the game
+                connected: this.state.connected.filter(player => player.playerID !== hostState.playerID)
+            })
+        }
     }
 
     render() {
-        const { gameCode } = this.state
+        const { gameCode, connected, buzzed } = this.state
 
+        const renderConnectedList = connected.map(player => <li key={player.playerID + player.time}>{player.playerName}</li>)
+        const renderBuzzedList = buzzed.map(player => <li key={player.playerID + player.time}>{player.playerName}</li>)
+        
         return (
             <Container>
                 <GameCodeContainer>
@@ -110,7 +148,7 @@ class Host extends React.PureComponent {
                         Players Buzzed
                     </h2>
                     <PlayersBuzzedList>
-                        <li>Christopher</li>
+                        {renderBuzzedList}
                     </PlayersBuzzedList>
                 </PlayersBuzzedContainer>
                 <PlayersConnected>
@@ -118,8 +156,7 @@ class Host extends React.PureComponent {
                         Players Connected
                     </h2>
                     <PlayersConnectedList>
-                        <li>Christopher</li>
-                        <li>Paulina</li>
+                        {renderConnectedList}
                     </PlayersConnectedList>
                 </PlayersConnected>
             </Container>
