@@ -54,9 +54,9 @@ const LockedBuzzer = styled.button`
 const beep = new UIfx(
     mp3File,
     {
-    volume: 1,
+        volume: 1,
     }
-  );
+);
 
 
 class Join extends React.PureComponent {
@@ -64,7 +64,6 @@ class Join extends React.PureComponent {
         super(props)
         
         this.state = {
-            // gameCode: 123456,
             gameCode: null,
             userID: null,
             buzzed: false,
@@ -119,28 +118,35 @@ class Join extends React.PureComponent {
     }
 
     updateGameState = data => {
-        console.log(data)
-
         const { locked } = this.state;
 
-        this.setState({
-            ...this.state,
-            gameCode: data.gameID,
-            userID: data.playerID,
-        })
+        console.log(data)
  
         if (data.action === "reset") {
             this.setState({
                 ...this.state,
                 buzzed: false,
             })
-        }
-
-        if (data.action === "lock") {
+        } else if(data.action === "lock") {
             this.setState({
                 ...this.state,
                 locked: !locked,
                 buzzed: false,
+            })
+        } else if (data.action === "buzz") {
+            // do nothing
+        } else if (data.action === "disconnect") {
+            this.setState({
+                ...this.state,
+                gameCode: null,
+                formGameCode: undefined,
+                formName: "",
+            })
+        } else {
+            this.setState({
+                ...this.state,
+                gameCode: data.gameID,
+                userID: data.playerID,
             })
         }
     }
