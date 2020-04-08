@@ -92,7 +92,7 @@ class Join extends React.PureComponent {
 
         const { gameCode, userID } = this.state
 
-        await fetch(`https://${getConfig().api.host}:${getConfig().api.port}/play/${gameCode}/buzz`, {
+        await fetch(`/api/play/${gameCode}/buzz`, {
             method: 'POST',
             body: JSON.stringify({
                 "gameID": gameCode,
@@ -108,7 +108,7 @@ class Join extends React.PureComponent {
     }
 
     initEventSource = (formGameCode, formName) => {
-        this.eventSource = new EventSource(`https://${getConfig().api.host}:${getConfig().api.port}/play/${formGameCode}?name=${formName}`)
+        this.eventSource = new EventSource(`/api/play/${formGameCode}?name=${formName}`)
 
         this.eventSource.onmessage = e => {
             this.updateGameState(JSON.parse(e.data))
