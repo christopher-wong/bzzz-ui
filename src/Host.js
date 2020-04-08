@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
 
+import getConfig from "./config";
+
 const Container = styled.div`
     margin: 1em;
 `
@@ -36,7 +38,7 @@ class Host extends React.PureComponent {
 
         const { gameCode } = this.state;
 
-        await fetch(`https://localhost:8080/host/${gameCode}/lock`, {
+        await fetch(`https://${getConfig().api.host}:${getConfig().api.port}/host/${gameCode}/lock`, {
             method: "POST",
         })
 
@@ -51,7 +53,7 @@ class Host extends React.PureComponent {
 
         const { gameCode } = this.state;
 
-        await fetch(`https://localhost:8080/host/${gameCode}/reset`, {
+        await fetch(`https://${getConfig().api.host}:${getConfig().api.port}/host/${gameCode}/reset`, {
             method: "POST",
         })
 
@@ -62,7 +64,7 @@ class Host extends React.PureComponent {
     }
 
     async componentDidMount() {
-        const response = await fetch(`https:localhost:8080/host`, {
+        const response = await fetch(`https://${getConfig().api.host}:${getConfig().api.port}/host`, {
             method: 'POST',
         })
         const json = await response.json()
@@ -74,7 +76,7 @@ class Host extends React.PureComponent {
 
         const { gameCode } = this.state;
 
-        this.eventSource = new EventSource(`https://localhost:8080/host/${gameCode}`);
+        this.eventSource = new EventSource(`https://${getConfig().api.host}:${getConfig().api.port}/host/${gameCode}`);
         
         this.eventSource.onmessage = e => (
             this.updateHostState(JSON.parse(e.data))

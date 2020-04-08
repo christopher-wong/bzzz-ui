@@ -20,6 +20,9 @@ spec:
       containers:
       - name: bzzz-ui
         image: registry.digitalocean.com/teslatrack/bzzz-ui:0.0.1
+        env:
+        - name: NODE_ENV
+          value: production
         imagePullPolicy: Always
         ports:
         - containerPort: 80

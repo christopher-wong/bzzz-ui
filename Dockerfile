@@ -19,4 +19,6 @@ COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
+ENV NODE_ENV=production
+
 CMD ["nginx", "-g", "daemon off;"]

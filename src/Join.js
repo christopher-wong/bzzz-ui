@@ -7,6 +7,8 @@ import mp3File from './static/beep.mp3';
 
 import styled from 'styled-components';
 
+import getConfig from "./config";
+
 const Container = styled.div`
     margin: 1em;
 `
@@ -90,7 +92,7 @@ class Join extends React.PureComponent {
 
         const { gameCode, userID } = this.state
 
-        await fetch(`https://localhost:8080/play/${gameCode}/buzz`, {
+        await fetch(`https://${getConfig().api.host}:${getConfig().api.port}/play/${gameCode}/buzz`, {
             method: 'POST',
             body: JSON.stringify({
                 "gameID": gameCode,
@@ -106,7 +108,7 @@ class Join extends React.PureComponent {
     }
 
     initEventSource = (formGameCode, formName) => {
-        this.eventSource = new EventSource(`https://localhost:8080/play/${formGameCode}?name=${formName}`)
+        this.eventSource = new EventSource(`https://${getConfig().api.host}:${getConfig().api.port}/play/${formGameCode}?name=${formName}`)
 
         this.eventSource.onmessage = e => {
             this.updateGameState(JSON.parse(e.data))
