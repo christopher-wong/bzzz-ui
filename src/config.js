@@ -1,18 +1,8 @@
 const getConfig = () => {
     if (process.env.NODE_ENV === "production") {
-        return {
-            "api": {
-                "host": "api.shipit.live",
-                "port": 80,
-            }
-        }
+        return ""
     } else {
-        return {
-            "api": {
-                "host": "localhost",
-                "port": 8080,
-            }
-        }
+        return "https://localhost:8080"
     }
 }
 

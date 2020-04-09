@@ -38,7 +38,7 @@ class Host extends React.PureComponent {
 
         const { gameCode } = this.state;
 
-        await fetch(`/api/host/${gameCode}/lock`, {
+        await fetch(`${getConfig()}/api/host/${gameCode}/lock`, {
             method: "POST",
         })
 
@@ -53,7 +53,7 @@ class Host extends React.PureComponent {
 
         const { gameCode } = this.state;
 
-        await fetch(`/api/host/${gameCode}/reset`, {
+        await fetch(`${getConfig()}/api/host/${gameCode}/reset`, {
             method: "POST",
         })
 
@@ -64,7 +64,7 @@ class Host extends React.PureComponent {
     }
 
     async componentDidMount() {
-        const response = await fetch(`/api/host`, {
+        const response = await fetch(`${getConfig()}/api/host`, {
             method: 'POST',
         })
         const json = await response.json()
@@ -76,7 +76,7 @@ class Host extends React.PureComponent {
 
         const { gameCode } = this.state;
 
-        this.eventSource = new EventSource(`/api/host/${gameCode}`);
+        this.eventSource = new EventSource(`${getConfig()}/api/host/${gameCode}`);
         
         this.eventSource.onmessage = e => (
             this.updateHostState(JSON.parse(e.data))

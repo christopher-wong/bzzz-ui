@@ -8,21 +8,31 @@ const Container = styled.div`
   margin: 1em;
 `
 
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: white;
+
+    &:hover {
+      text-decoration: none;
+  }
+`
+
 class Home extends React.PureComponent {
   render() {
 
     return (
       <Container>
-        <Link to="/join">
-          <Button variant="primary" block>
+        <StyledLink to="/join">
+          <Button variant="primary" size="lg" block>
             Join
           </Button>
-        </Link>
-        <Link to="/host">
-          <Button variant="secondary" block>
+        </StyledLink>
+        <br />
+        <StyledLink to="/host">
+          <Button variant="secondary" size="lg" block>
             Host
           </Button>
-        </Link>
+        </StyledLink>
     </Container>
     )
   }
